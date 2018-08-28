@@ -52,14 +52,28 @@ QUnit.module('Тестируем функцию get', function () {
 	QUnit.test('get работает правильно c некоректными данными', function (assert) {
 		const object = {
 			foo: {
-				bar: 42
+				bar: 42,
+				buzz: null
 			}
 		};
 
+		assert.strictEqual(get(object, '.foo.buzz'), null);
 		assert.strictEqual(get(undefined, '.foobar'), undefined);
-		assert.strictEqual(get(null, '.baz.0'), undefined);
+		assert.strictEqual(get(null, '.baz.0'), );
 		assert.strictEqual(get(object, undefined), undefined);
 		assert.strictEqual(get(object, null), undefined);
 		assert.strictEqual(get(object, ''), object);
+	});
+
+	QUnit.test("get работает правильно c getter'ами", function (assert) {
+		const object = {
+			foo : [1, 2, 3],
+			mlen : function() {
+				return -foo.length;
+			}
+		};
+
+		assert.strictEqual(get(object, '.foo.length'), object.foo.length);
+		assert.strictEqual(get(object, '.mlen'), object.mlen);
 	});
 });
