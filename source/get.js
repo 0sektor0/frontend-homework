@@ -1,26 +1,21 @@
-function get(object, property) {
-    if(property == undefined || property == null)
+function get(object, propertiesString) {
+    if(propertiesString == undefined)
         return undefined;
 
-    var properties = property.split('.');
+    let propertiesArray = propertiesString.split('.');
 
-    for(var i = 1; i < properties.length; i++)
+    let result = propertiesArray.some(function(property) {
         if(object == undefined)
-            return undefined;
+            return true;
 
-        else if(isNumeric(properties[i]))
-            object = object[+properties[i]];
+        object =  isNumeric(property) ? object = object[+property] :
+        (object.hasOwnProperty(property)) ? object[property] :
+        (property == "") ? object : undefined;
 
-        else if(object.hasOwnProperty(properties[i]))
-            object = object[properties[i]];
+        return false;
+    })
 
-        else if(properties[i] == "")
-            continue;
-            
-        else
-            return undefined;
-
-    return object;
+    return result ? undefined : object;
 }
 
 
