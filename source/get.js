@@ -5,9 +5,13 @@ function get(object, propertiesString)
 
     let propertiesArray = propertiesString.split('.');
 
-    let result = propertiesArray.some(function(property) 
+    propertiesArray.some(function(property) 
     {
-        object = getNestedProperty(object, property)
+        property = isNumeric(property) ? +property : property;
+
+        if(object && !(!property && property !== 0))
+            object = object[property];
+
         return !object;
     })
 
@@ -18,17 +22,4 @@ function get(object, propertiesString)
 function isNumeric(n) 
 {
     return !isNaN(parseFloat(n)) && isFinite(n);
-}
-
-
-function tryConvertToNumeric(n) {
-    return isNumeric(n) ? +n : n;
-} 
-
-
-function getNestedProperty(object, property) {
-    property = tryConvertToNumeric(property);
-
-    return (!object || (!property && property !== 0)) ? object :
-    (object.hasOwnProperty(property)) ? object[property] : undefined;
 }
